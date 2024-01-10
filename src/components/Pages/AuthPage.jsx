@@ -40,7 +40,7 @@ const AuthPage = () => {
         email: data.email,
         password: data.password,
       };
-      const res = await axios.post("http://localhost:5000/api/auth", newData);
+      const res = await axios.post("https://typing-arena-server.vercel.app/api/auth", newData);
       localStorage.setItem("token", res.data.data);
       window.location = "/game";
       toast.success(res.data.message);
@@ -71,7 +71,7 @@ const AuthPage = () => {
         email: data.email,
         password: data.password,
       };
-      const res = await axios.post("http://localhost:5000/api/users", newData);
+      const res = await axios.post("https://typing-arena-server.vercel.app/api/users", newData);
       console.log("Users : ", res.message);
       localStorage.setItem("token", res.data);
       window.location = "/game";
