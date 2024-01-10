@@ -31,6 +31,7 @@ const AuthPage = () => {
   useEffect(() => {
     console.log("data.name : ", data.name);
   }, [data.name]);
+  axios.defaults.withCredentials = true;
 
   const handleSignIn = async (e) => {
     try {
