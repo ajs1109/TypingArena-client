@@ -1,225 +1,226 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./SP.css";
+import React, { useEffect, useState } from "react";
 import { generate } from "random-words";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { jwtDecode } from "jwt-decode";
 import { LogOut } from "lucide-react";
-import toast from "react-hot-toast";
+
+import "./SinglePlayer.scss";
 
 const noOfWords = 200;
-const seconds = 60;
-let paraLength = 0;
+const Time = 60;
 
-function SinglePlayer() {
+const SinglePlayer2 = () => {
+  const [timer, setTimer] = useState(Time);
   const [words, setWords] = useState([]);
-  const [countDown, setCountDown] = useState(seconds);
-  const [currInput, setCurrInput] = useState("");
-  const [currCharIndex, setCurrCharIndex] = useState(-1);
-  const [currChar, setCurrChar] = useState("");
-  const [status, setStatus] = useState("waiting");
+  const [index, setIndex] = useState(0);
+  const [paragraph, setParagraph] = useState("");
+  const [letterCSS, setLetterCSS] = useState([]);
   const [correct, setCorrect] = useState(0);
   const [incorrect, setIncorrect] = useState(0);
-  const [wordsPerMinute, setWordsPerMinute] = useState(0);
-  const [paragraphInd, setParagraphInd] = useState(1);
-  const [paragraph, setParagraph] = useState("");
-  const [colors,setColors] = useState([''])
-  const textInput = useRef(null);
+  const [isCorrect, setIsCorrect] = useState(0);
+  const [status, setStatus] = useState("waiting");
+  const [accuracyArray, setAccuracyArray] = useState([]);
 
-  const token = localStorage.getItem("token");
-  const name = jwtDecode(token)._name;
+  const start = () => {
+    setCorrect(0);
+    setIncorrect(0);
+    setIsCorrect(0);
+    setIndex(0);
+    setLetterCSS([]);
+    setParagraph("");
+    setParagraph((text) => {
+      words.map((word) => {
+        text = text + word + " ";
+      });
+      return text;
+    });
+  };
 
-  function generateWords() {
-    return generate({ exactly: noOfWords });
-  }
   useEffect(() => {
+    const generateWords = () => {
+      return generate({ exactly: noOfWords });
+    };
     setWords(generateWords());
+    console.log("words", words);
+    setCorrect(0);
+    setIncorrect(0);
+    setIsCorrect(0);
+    setIndex(0);
+    setLetterCSS([]);
+    setParagraph("");
+    setParagraph((text) => {
+      words.map((word) => {
+        text = text + word + " ";
+      });
+      return text;
+    });
+    console.log("para: ", paragraph);
   }, []);
 
   useEffect(() => {
-    setParagraphInd(1);
-    setParagraph("");
-    paraLength = 0;
-    words.map((word) => {
-      setParagraph((p) => p + " " + word);
-      paraLength += word.length + 1;
-    });
-    setColors(Array(paraLength).fill(''));
-  }, [words]);
-  // console.log(paraLength)
+    console.log(status);
 
-  // console.log(colors)
-
-  useEffect(() => {
-    if (countDown !== seconds)
-      setWordsPerMinute(
-        Number(
-          Math.round(
-            ((60 / seconds) * (correct * seconds)) / (seconds - countDown)
-          )
-        )
-      );
-  }, [countDown, correct]);
-
-  useEffect(() => {
-    if (status === "started") {
-      textInput.current.focus();
+    if (status === "waiting") {
+      setTimer(Time);
+    }
+    if (status === "finished") {
+      setIsCorrect(0);
+      setIndex(0);
+      setLetterCSS([]);
+      setParagraph("");
+      setTimer(Time);
     }
   }, [status]);
 
-  const start = () => {
-    if (status === "finished") {
-      setWords(generateWords());
-      setCorrect(0);
-      setIncorrect(0);
-      setCurrChar("");
-    }
-    if (status !== "started") setStatus("started");
-
-    let interval = setInterval(() => {
-      setCountDown((prevCount) => {
-        if (prevCount === 0) {
-          setStatus("finished");
-          clearInterval(interval);
-          setCurrInput("");
-          return seconds;
-        } else {
-          return prevCount;
-        }
-      });
-    }, 1000);
-  };
-
-  const reset = () => {
-    setCountDown(0);
-    setStatus("waiting");
-    setWords(generateWords());
-    setCorrect(0);
-    setIncorrect(0);
-    setCurrCharIndex(-1);
-    setCurrChar("");
-  };
-
-  function handleKeyDown({ keyCode, key }) {
-    console.log("pressed key : ",keyCode, key);
-    console.log('paragraph ind : ',paragraphInd);
-    if (keyCode >= 65 && keyCode <= 90) {
-      setCurrChar(key);
-      setParagraphInd((id) => id + 1);
-      console.log("paragraph key : ",paragraph[paragraphInd]);
-      if (key === paragraph[paragraphInd]) {
-        console.log("ok");
-      }
-    }
-    if (keyCode === 32) {
-      setCurrChar(" ");
-      setParagraphInd((id) => id + 1);
-    } else if (keyCode === 8) {
-      if (paragraphInd > 0) {setParagraphInd((id) => id - 1);
-      setCurrChar(paragraph[paragraphInd]);
-      setColors((color) => { color[paragraphInd]=''; return color});
-    }
-      else setCurrChar(" ");
-    } else {
-      setCurrChar(null);
-    }
-  }
-
-  function getCharClass(charInd, char) {
-     if (!char) return "";
-    // if (charInd === paragraphInd && char && status !== "finished") {
-      if (char === currChar) return "success";
-      else return "failure";
-  
-  }
-
   const logout = () => {
     localStorage.clear();
-    window.location = "/";
   };
 
-  const checkColor = (target) => {
-    setCurrInput(target);
-    console.log('hh : ', currInput.charAt(currInput.length - 1) )
-    if(currInput.charAt(currInput.length - 1) === paragraph[paragraphInd - 1]) setColors((color) => { color[paragraphInd]='success'; return color});
-    else setColors(color => {color[paragraphInd]='failure'; return color});
-    // setColors((color) => {
-    //   color = Array(paraLength).fill('')
-    //   color[paragraphInd] = 'success'
-    //   return color
-    // });
-  }
- 
+  const inputText = (e) => {
+    const arr = letterCSS;
+    arr.pop();
+    console.log(e, index, isCorrect);
+    console.log(letterCSS);
+    if (e === "Backspace") {
+      if (paragraph[index - 1] === " ") {
+        if (accuracyArray.at(-1) === "correct") {
+          setCorrect((c) => c - 1);
+        } else setIncorrect((c) => c - 1);
+      }
+
+      if (index >= 0 && letterCSS[index - 1] === "failure")
+        setIsCorrect((c) => c - 1);
+      setIndex((ind) => (ind > 1 ? ind - 1 : 0));
+
+      if (index > 0) {
+        arr.pop();
+        arr.push("char-pointer");
+      }
+    } else if (e.length === 1) {
+      setIndex((ind) => ind + 1);
+      if (e === paragraph[index]) {
+        arr.push("success");
+      } else {
+        setIsCorrect((c) => c + 1);
+        arr.push("failure");
+      }
+      arr.push("char-pointer");
+      if (paragraph[index] === " ") {
+        if (isCorrect <= 0) {
+          setCorrect((c) => c + 1);
+          let arr = accuracyArray;
+          arr.push("correct");
+          setAccuracyArray(arr);
+        } else {
+          setIncorrect((c) => c + 1);
+          let arr = accuracyArray;
+          arr.push("incorrect");
+          setAccuracyArray(arr);
+        }
+        setIsCorrect(0);
+        console.log("accuracy:" + (correct * 100) / (correct + incorrect));
+        console.log("wpm:", correct);
+      }
+      setLetterCSS(arr);
+    }
+  };
+
+  const handleClick = () => {
+    document.getElementById("words").focus();
+    if (status !== "started") {
+      setStatus("started");
+
+      start();
+      let interval = setInterval(() => {
+        setTimer((currTime) => {
+          if (currTime <= 0) {
+            setStatus("finished");
+            clearInterval(interval);
+            return 0;
+          }
+          return currTime - 1;
+        });
+      }, 1000);
+    }
+  };
 
   return (
-    <div className="  h-[100vh] w-[100vw] bg-[#222736] text-[#eef1f2] flex flex-col flex-nowrap">
+    <div
+      className="font-mono text-justify h-[100vh] w-[100vw] bg-[#222736] text-[#eef1f2] flex flex-col flex-nowrap"
+      onKeyDown={(e) =>
+        e.key === "Enter" && status !== "started" ? handleClick() : null
+      }
+    >
+      {/* Header */}
       <div className="flex justify-between leading-7 sm:truncate sm:tracking-tight text-xl bg-[#2a3042] w-full p-4">
         <div className="font-semibold my-auto">TYPING TEST ARENA</div>
         <div className="flex">
-          <div className="my-auto mx-2">Hi, {name}</div>
-          <Button className="bg-transparant hover:bg-red-500" onClick={logout}>
+          <div className="my-auto mx-2">Hi, name</div>
+          <button className="bg-transparant hover:bg-red-500" onClick={logout}>
             <LogOut />
-          </Button>
+          </button>
         </div>
       </div>
 
-      <div className="seconds text-2xl p-4 pb-0 text-center ">
-        <p>{countDown}</p>
+      <div className="mx-auto w-full mt-8 text-bold text-[30px] font-mono flex justify-around">
+        <div
+          className={`${
+            status === "started" || status === "finished"
+              ? "flex justify-center"
+              : "invisible"
+          } flex-1`}
+        >
+          WPM:{" "}
+          {correct > 0 && timer !== 0
+            ? ((correct * Time) / (Time - timer))
+                .toLocaleString()
+                .substring(0, 4)
+            : 0}
+        </div>
+        <div className="flex-1 flex justify-center">{timer}</div>
+        <div
+          className={`${
+            status === "started" || status === "finished"
+              ? "flex justify-center"
+              : "invisible"
+          } flex-1`}
+        >
+          Accuracy:{" "}
+          {correct > 0
+            ? ((correct * 100) / (correct + incorrect))
+                .toString()
+                .substring(0, 4)
+            : 0}{" "}
+          %
+        </div>
       </div>
 
-      <div className="input-group p-4">
-        <Input
-          ref={textInput}
-          disabled={status !== "started"}
-          type="text"
-          className=" bg-[#32394e] border-none outline-none"
-          onKeyDown={handleKeyDown}
-          value={currInput}
-          onChange={(e) => checkColor(e.target.value)}
-        />
-      </div>
+      <button
+        onClick={() => {
+          window.location.reload();
+        }}
+      >
+        Reset
+      </button>
 
-      <div className="startButton text-center d-grid gap-2 my-2 mx-auto">
-        {status === "waiting" || status === "finished" ? (
-          <Button type="button" className="bg-[#556ee6]" onClick={start}>
-            Start
-          </Button>
-        ) : (
-          <Button type="button" className="bg-[#556ee6]" onClick={reset}>
-            Reset
-          </Button>
-        )}
-      </div>
-      {status === "started" && (
-        <div className="words p-2 m-4 bg-[#2a3042] ">
-          {paragraph.split("").map((char, i) => (
-            <span key={i}>
-              <span className={colors[i]}>{char}</span>
+      <div
+        id="game"
+        tabIndex="0"
+        onKeyDown={(e) => inputText(e.key)}
+        onClick={handleClick}
+        className={`outline-none w-[90%] h-full mt-16 text-xl mx-auto relative tracking-widest`}
+      >
+        <div id="words" className="z-10">
+          {paragraph.split("").map((letter, ind) => (
+            <span key={ind} className={`${letterCSS[ind]}`}>
+              {letter}
             </span>
           ))}
         </div>
-      )}
-      {status !== "waiting" && (
-        <div className="flex justify-evenly w-full">
-          <div className="col flex justify-around">
-            <p className="fs-2 text-xl">
-              Words Per Minute : {correct === 0 ? 0 : wordsPerMinute}
-            </p>
-            <p className="seconds fs-1"></p>
-          </div>
-          <div className="flex justify-around">
-            <p className="text-xl">
-              Accuracy :{" "}
-              {correct === 0
-                ? 0
-                : Math.round((correct / (correct + incorrect)) * 100)}
-              %
-            </p>
-          </div>
+        <div id="focus-click" className="cursor-pointer">
+          Click here to Play
         </div>
-      )}
+      </div>
     </div>
   );
-}
+};
 
-export default SinglePlayer;
+export default SinglePlayer2;

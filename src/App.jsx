@@ -5,7 +5,6 @@ import AuthPage from './components/Pages/AuthPage';
 import HomePage from './components/Pages/HomePage';
 import SinglePlayer from './components/Pages/SinglePlayer';
 import MultiPlayer from './components/Pages/MultiPlayer';
-import SinglePlayer2 from './components/Pages/SinglePlayer copy';
 
 function App() {
   const [user,setUser] = useState(false);
@@ -28,7 +27,7 @@ function App() {
         <Routes>
           <Route path="/" element={!user ? <AuthPage/> : <Navigate to='/game'/>}/>
           <Route path="/game" element={user ? <HomePage/> : <Navigate to='/'/>}/>
-          <Route path="/singlePlayer" element={<SinglePlayer2/>} />
+          <Route path="/singlePlayer" element={<SinglePlayer/>} />
           <Route path="/multiPlayer" element={<MultiPlayer/>} />
         </Routes>
       </Router>
