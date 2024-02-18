@@ -39,7 +39,6 @@ const SinglePlayer2 = () => {
       return generate({ exactly: noOfWords });
     };
     setWords(generateWords());
-    console.log("words", words);
     setCorrect(0);
     setIncorrect(0);
     setIsCorrect(0);
@@ -52,12 +51,9 @@ const SinglePlayer2 = () => {
       });
       return text;
     });
-    console.log("para: ", paragraph);
   }, []);
 
   useEffect(() => {
-    console.log(status);
-
     if (status === "waiting") {
       setTimer(Time);
     }
@@ -77,8 +73,6 @@ const SinglePlayer2 = () => {
   const inputText = (e) => {
     const arr = letterCSS;
     arr.pop();
-    console.log(e, index, isCorrect);
-    console.log(letterCSS);
     if (e === "Backspace") {
       if (paragraph[index - 1] === " ") {
         if (accuracyArray.at(-1) === "correct") {
@@ -116,8 +110,6 @@ const SinglePlayer2 = () => {
           setAccuracyArray(arr);
         }
         setIsCorrect(0);
-        console.log("accuracy:" + (correct * 100) / (correct + incorrect));
-        console.log("wpm:", correct);
       }
       setLetterCSS(arr);
     }
