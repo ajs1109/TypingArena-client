@@ -48,9 +48,6 @@ const HomePage = () => {
         </div>
       </div>
     </div>
-    // <div className="div-with-line bg-black">
-    //   <div className="line"></div>
-    // </div>
   );
 };
 

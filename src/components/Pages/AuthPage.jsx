@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -30,20 +30,12 @@ const AuthPage = () => {
   const [user, setUser] = useState(false);
 
   const handleSignUpChange = (e) => {
-    // if(e.key=='Enter') console.log('clicked enter')
-    // console.log(e.target.value)
     setSignUpData({ ...signUpData, [e.target.name]: e.target.value });
   };
 
   const handleSignInChange = (e) => {
-    // if(e.key=='Enter') console.log('clicked enter')
-    // console.log(e.target.value)
     setSignInData({ ...signInData, [e.target.name]: e.target.value });
   };
-
-  useEffect(() => {
-    console.log("sign up data.name : ", signUpData.name);
-  }, [signUpData.name]);
 
   const handleSignIn = async (e) => {
     try {
@@ -57,7 +49,6 @@ const AuthPage = () => {
       localStorage.setItem("token", res.data.data);
       window.location = "/game";
       toast.success(res.data.message);
-      console.log("Auth : ", res.data.message);
     } catch (error) {
       if (
         error.response &&
@@ -65,7 +56,6 @@ const AuthPage = () => {
         error.response.status <= 500
       ) {
         toast.error(error.response.data.message);
-        console.log("Error : ", error.response.data.message);
       }
     }
   };
@@ -80,12 +70,7 @@ const AuthPage = () => {
         password: signUpData.password,
         confirmPassword: signUpData.confirmPassword,
       };
-      const tokenData = {
-        email: signUpData.email,
-        password: signUpData.password,
-      };
       const res = await axios.post("https://typing-arena-server.vercel.app/api/users", newData);
-      console.log("Users : ", res.message);
       localStorage.setItem("token", res.data);
       window.location = "/game";
     } catch (error) {
@@ -95,7 +80,6 @@ const AuthPage = () => {
         error.response.status <= 500
       ) {
         toast.error(error.response.data.message);
-        console.log("Error : ", error.response.data.message);
       }
     }
   };
