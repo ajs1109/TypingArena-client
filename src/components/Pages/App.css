@@ -49,3 +49,27 @@ body {
     font-size: 18px;
   }
   
+  .div-with-line {
+    background-color: #eee;
+    width: 200px;
+    height: 200px;
+  }
+  
+  .line {
+    width:100svh;
+    background-color: #ddd;
+    height: 3px;
+    transform: rotate(-60deg);
+    position: relative;
+    /* right: 39px; */
+    top: 299px;
+  }
+
+  /* .trapezoid {
+    border-bottom: 50vh solid #555;
+    border-top: 75vh solid #555;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    /* height: 0; */
+    /* width: 125px; */
+  /* } */

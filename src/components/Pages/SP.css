@@ -10,13 +10,13 @@
     background-color: #5F78B4;
   }
   
-  .success{
+  /* .success{
     background-color: greenyellow;
   }
   
   .failure{
     background-color: red;
-  }
+  } */
   
   .App{
     display: flex;

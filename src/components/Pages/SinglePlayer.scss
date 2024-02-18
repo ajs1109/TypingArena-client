@@ -1,0 +1,46 @@
+:root{
+    --primaryColor:#fff;
+    --secondaryColor:#666;
+    --incorrectColor: #f55;
+}
+
+.success{
+    color: var(--primaryColor);
+}
+
+.failure{
+    color: var(--incorrectColor);
+}
+
+#words{
+    filter: blur(5px);
+    color: var(--secondaryColor);
+}
+
+#game:focus #words{
+    filter: blur(0);
+}
+
+#focus-click{
+    position:absolute;
+    inset: 0;
+    top: 70px;
+    text-align:center;
+}
+
+#game:focus #focus-click{
+    display: none;
+}
+
+@keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+
+.char-pointer{
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--primaryColor);
+    
+}

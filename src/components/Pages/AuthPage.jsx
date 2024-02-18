@@ -15,32 +15,45 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const AuthPage = () => {
-  const [data, setData] = useState({
+  const [signUpData, setSignUpData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+
+  const [signInData, setSignInData] = useState({
+    email: "",
+    password: ""
+  });
+
   const [user, setUser] = useState(false);
-  // const navigate = useNavigate();
-  const handleChange = (e) => {
+
+  const handleSignUpChange = (e) => {
     // if(e.key=='Enter') console.log('clicked enter')
     // console.log(e.target.value)
-    setData({ ...data, [e.target.name]: e.target.value });
+    setSignUpData({ ...signUpData, [e.target.name]: e.target.value });
   };
+
+  const handleSignInChange = (e) => {
+    // if(e.key=='Enter') console.log('clicked enter')
+    // console.log(e.target.value)
+    setSignInData({ ...signInData, [e.target.name]: e.target.value });
+  };
+
   useEffect(() => {
-    console.log("data.name : ", data.name);
-  }, [data.name]);
+    console.log("sign up data.name : ", signUpData.name);
+  }, [signUpData.name]);
 
   const handleSignIn = async (e) => {
     try {
       e.preventDefault();
 
       const newData = {
-        email: data.email,
-        password: data.password,
+        email: signInData.email,
+        password: signInData.password,
       };
-      const res = await axios.post("http://localhost:5000/api/auth", newData);
+      const res = await axios.post("http://localhost:6010/api/auth", newData);
       localStorage.setItem("token", res.data.data);
       window.location = "/game";
       toast.success(res.data.message);
@@ -62,16 +75,16 @@ const AuthPage = () => {
       e.preventDefault();
 
       const newData = {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
+        name: signUpData.name,
+        email: signUpData.email,
+        password: signUpData.password,
+        confirmPassword: signUpData.confirmPassword,
       };
       const tokenData = {
-        email: data.email,
-        password: data.password,
+        email: signUpData.email,
+        password: signUpData.password,
       };
-      const res = await axios.post("http://localhost:5000/api/users", newData);
+      const res = await axios.post("http://localhost:6010/api/users", newData);
       console.log("Users : ", res.message);
       localStorage.setItem("token", res.data);
       window.location = "/game";
@@ -112,8 +125,8 @@ const AuthPage = () => {
                   id="name"
                   type="email"
                   name="email"
-                  onChange={handleChange}
-                  value={data.email}
+                  onChange={handleSignInChange}
+                  value={signInData.email}
                   required
                 />
               </div>
@@ -124,13 +137,13 @@ const AuthPage = () => {
                   id="username"
                   type="password"
                   name="password"
-                  onChange={handleChange}
+                  onChange={handleSignInChange}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       () => handleClick;
                     }
                   }}
-                  value={data.password}
+                  value={signInData.password}
                   required
                 />
               </div>
@@ -154,8 +167,8 @@ const AuthPage = () => {
                   id="current"
                   type="name"
                   name="name"
-                  onChange={handleChange}
-                  value={data.name}
+                  onChange={handleSignUpChange}
+                  value={signUpData.name}
                   required
                 />
               </div>
@@ -166,8 +179,8 @@ const AuthPage = () => {
                   id="current"
                   type="email"
                   name="email"
-                  onChange={handleChange}
-                  value={data.email}
+                  onChange={handleSignUpChange}
+                  value={signUpData.email}
                   required
                 />
               </div>
@@ -177,8 +190,8 @@ const AuthPage = () => {
                   className='bg-[#2a3042] border-[#2f364a] border-2'
                   type="password"
                   name="password"
-                  onChange={handleChange}
-                  value={data.password}
+                  onChange={handleSignUpChange}
+                  value={signUpData.password}
                   required
                 />
               </div>
@@ -188,8 +201,8 @@ const AuthPage = () => {
                   className='bg-[#2a3042] border-[#2f364a] border-2'
                   type="password"
                   name="confirmPassword"
-                  onChange={handleChange}
-                  value={data.confirmPassword}
+                  onChange={handleSignUpChange}
+                  value={signUpData.confirmPassword}
                   required
                 />
               </div>
