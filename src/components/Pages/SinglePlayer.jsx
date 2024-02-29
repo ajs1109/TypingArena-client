@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { generate } from "random-words";
-import { LogOut } from "lucide-react";
-
 import "./SinglePlayer.scss";
 
 const noOfWords = 200;
 const Time = 60;
 
-const SinglePlayer2 = () => {
+const SinglePlayer = () => {
   const [timer, setTimer] = useState(Time);
   const [words, setWords] = useState([]);
   const [index, setIndex] = useState(0);
@@ -66,11 +64,9 @@ const SinglePlayer2 = () => {
     }
   }, [status]);
 
-  const logout = () => {
-    localStorage.clear();
-  };
-
   const inputText = (e) => {
+    console.log(e.key)
+    console.log(letterCSS)
     const arr = letterCSS;
     arr.pop();
     if (e === "Backspace") {
@@ -136,21 +132,12 @@ const SinglePlayer2 = () => {
 
   return (
     <div
-      className="font-mono text-justify h-[100vh] w-[100vw] bg-[#222736] text-[#eef1f2] flex flex-col flex-nowrap"
+      className="font-mono text-justify bg-[#222736] text-[#eef1f2] flex flex-col flex-nowrap"
       onKeyDown={(e) =>
         e.key === "Enter" && status !== "started" ? handleClick() : null
       }
     >
-      {/* Header */}
-      <div className="flex justify-between leading-7 sm:truncate sm:tracking-tight text-xl bg-[#2a3042] w-full p-4">
-        <div className="font-semibold my-auto">TYPING TEST ARENA</div>
-        <div className="flex">
-          <div className="my-auto mx-2">Hi, name</div>
-          <button className="bg-transparant hover:bg-red-500" onClick={logout}>
-            <LogOut />
-          </button>
-        </div>
-      </div>
+
 
       <div className="mx-auto w-full mt-8 text-bold text-[30px] font-mono flex justify-around">
         <div
@@ -161,11 +148,11 @@ const SinglePlayer2 = () => {
           } flex-1`}
         >
           WPM:{" "}
-          {correct > 0 && timer !== 0
+          {correct > 0 && timer !== 0 && timer !== 60
             ? ((correct * Time) / (Time - timer))
                 .toLocaleString()
                 .substring(0, 4)
-            : 0}
+            : timer === 60 ? correct : 0}
         </div>
         <div className="flex-1 flex justify-center">{timer}</div>
         <div
@@ -215,4 +202,4 @@ const SinglePlayer2 = () => {
   );
 };
 
-export default SinglePlayer2;
+export default SinglePlayer;
