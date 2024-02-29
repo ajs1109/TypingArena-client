@@ -29,7 +29,7 @@ const MultiPlayer = () => {
   const handleSubmit = () => {
     
     if(joinRoom.length === 6){
-        socket.emit('check-room',{id:socket.id,room:joinRoom})
+        socket.emit('joined-room',{id:socket.id,room:joinRoom})
         socket.on('is-right-room',({success,message}) => {
           if(success) toast.success(message);
           else toast.error(message);                                                        
@@ -60,7 +60,7 @@ const MultiPlayer = () => {
           <Input className='w-1/2 text-black' value={joinRoom} onChange={e => setJoinRoom(e.target.value)}/>
           <Button onClick={handleSubmit}>Submit</Button>
         </div>
-        <div className="m-auto flex" >
+        {/* <div className="m-auto flex" >
           <ArrowLeftRight className="w-[100px] h-[100px]" />
         </div>
         <div
@@ -68,14 +68,14 @@ const MultiPlayer = () => {
           onClick={handleCreate}
         >
           <p className="m-auto text-xl">Create Room</p>
-        </div>
+        </div> */}
       </div>
-      <div className={`${status === 'created' ? 'flex flex-col' : 'hidden'} w-full text-center my-40 text-xl gap-4`}>
+      {/* <div className={`${status === 'created' ? 'flex flex-col' : 'hidden'} w-full text-center my-40 text-xl gap-4`}>
         <div>Waiting for other user to join</div>
         <div>Your Room code: {room}</div>
         <div className="text-base"> use this code to invite your friend</div>
         <Button className='w-fit mx-auto bg-red-500' onClick={handleExit}>Exit</Button>
-      </div>
+      </div> */}
     </div>
   );
 }; 
