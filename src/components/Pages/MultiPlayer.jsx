@@ -16,7 +16,7 @@ const MultiPlayer = () => {
   const [status,setStatus] = useState('waiting')
   const [joinRoom,setJoinRoom] = useState('');
 
-  const socket = io('http://localhost:6010')
+  const socket = io('https://typing-arena-server.vercel.app')
   
   const handleCreate = () => {
     setRoom(Math.floor(100000 + Math.random() * 900000))
