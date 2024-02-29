@@ -45,7 +45,7 @@ const AuthPage = () => {
         email: signInData.email,
         password: signInData.password,
       };
-      const res = await axios.post("http://typing-arena-server.vercel.app/api/auth", newData);
+      const res = await axios.post("https://typing-arena-server.vercel.app/api/auth", newData);
       localStorage.setItem("token", res.data.data);
       window.location = "/game";
       toast.success(res.data.message);
